@@ -9,7 +9,7 @@ an English and a Persian version.
 
 - [TLS fragment](features/tls-fragment.en.md): split the ClientHello into small pieces with pauses, so DPI cannot read the server name.
 - [TLS tricks](features/tls-tricks.en.md): a mixed-case server name and a padding extension in the ClientHello.
-- [REALITY in Hiddify](features/reality-hiddify.en.md): the post-quantum key share, the `key_share` option, and fragmentation on REALITY.
+- [REALITY in Hiddify](features/reality-hiddify.en.md): the post-quantum key share, the `key_share` option, fragmentation on REALITY, and passive verification of VLESS peer addresses.
 - [PROXY protocol](features/proxy-protocol.en.md): inbounds read the PROXY protocol header and the direct outbound sends it.
 
 ## Protocols

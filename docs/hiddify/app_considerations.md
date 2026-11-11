@@ -62,6 +62,11 @@ do about it. Items marked **Required** break or misbehave until they are handled
 - **tls_fragment in the tls block.** The core now moves a `tls_fragment` written inside an
   outbound's `tls` block to the dialer (unless the dialer has its own). hiddify-core's config
   patching that does the same can stay or be removed.
+- **VLESS/REALITY domain endpoints.** The selected VLESS outbound instance exposes
+  `WatchVerifiedRealityPeer(replay bool)`. Its channel carries a verified TCP peer after an
+  ordinary tunneled TCP response. Keep isolated applications offline until then. Revoke on
+  profile changes, unsubscribe, discard queued events from older generations, and use fresh-only
+  observation when reusing an instance. A worker still validates the configured SNI and key.
 - **REALITY and fragmentation.** `tls.fragment` and `tls.record_fragment` now work with REALITY.
   hiddify-core skips fragmentation for REALITY nodes; that skip can be removed. The new
   `tls.reality.key_share` (`""`, `hybrid`, `classical`) is available; `classical` is refused by

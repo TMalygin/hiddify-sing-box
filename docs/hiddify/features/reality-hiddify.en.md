@@ -103,6 +103,22 @@ Compatibility: tested with the chrome, firefox, safari and edge fingerprints aga
 by 26.10.21. `fragment` and `record_fragment` work with both. The older-browser classical
 ClientHellos and `auto` are tested against the sing-box REALITY server only so far.
 
+## Observing a verified peer
+
+A trusted application embedding the core can call `WatchVerifiedRealityPeer(replay bool)` on a
+VLESS outbound whose server address is a domain. The event contains the numeric address and port
+of the physical TCP connection. The core records it after REALITY authenticates the peer and the
+same connection returns its first decoded VLESS payload. This supports ordinary raw TCP and
+Vision flows with the standard dialer. The API runs no probe or DNS lookup and adds no profile
+setting. A client that needs this evidence must stay offline while it waits. A TLS handshake, a
+successful write, and UDP-only traffic leave it waiting.
+
+A subscription with `replay=true` can receive the most recently verified peer of that outbound
+instance. With `replay=false`, only connections started after subscription qualify. Each observer
+gets the latest address when several changes arrive before it reads. Cancel the watch when the
+profile is revoked and check its generation before acting on any queued event. The worker still
+authenticates the selected endpoint with the profile’s REALITY parameters.
+
 ## See also
 
 - [TLS fragment](tls-fragment.en.md)

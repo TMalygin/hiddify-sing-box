@@ -41,6 +41,7 @@ var (
 )
 
 type Outbound struct {
+	verifiedPeers *verifiedRealityPeers //H
 	outbound.Adapter
 	logger          logger.ContextLogger
 	dialer          N.Dialer
@@ -126,6 +127,7 @@ func NewOutbound(ctx context.Context, router adapter.Router, logger log.ContextL
 	if err != nil {
 		return nil, err
 	}
+	outbound.verifiedPeers = newVerifiedRealityPeers(options) //H
 	return outbound, nil
 }
 
@@ -200,6 +202,9 @@ func (h *Outbound) Start(stage adapter.StartStage, scope *adapter.Scope) error {
 	if stage != adapter.StartStateInitialize {
 		return nil
 	}
+	if h.verifiedPeers != nil { //H
+		scope.Add(h.verifiedPeers.close) //H
+	} //H
 	if h.transport != nil {
 		scope.Add(h.transport.Close)
 	}
@@ -215,6 +220,7 @@ func (h *vlessDialer) DialContext(ctx context.Context, network string, destinati
 	ctx, metadata := adapter.ExtendContext(ctx)
 	metadata.Outbound = h.Tag()
 	metadata.Destination = destination
+	peer := h.verifiedPeers.begin(network) //H
 	var conn net.Conn
 	var baseConn net.Conn
 	var hookOnce sync.Once
@@ -243,6 +249,7 @@ func (h *vlessDialer) DialContext(ctx context.Context, network string, destinati
 	} else {
 		conn, err = h.dialer.DialContext(ctx, N.NetworkTCP, h.serverAddr)
 		if err == nil && h.tlsConfig != nil {
+			peer.capture(conn, h.serverAddr.Port)                      //H: keep the physical socket, before TLS replaces it
 			rawConn := conn                                            //H
 			conn, err = tls.ClientHandshake(ctx, rawConn, h.tlsConfig) //H
 			if err != nil {                                            //H: the TLS handshake does not close the conn it was given
@@ -307,9 +314,9 @@ func (h *vlessDialer) DialContext(ctx context.Context, network string, destinati
 		if h.vision && visionBaseConn != nil {
 			// For Vision, we need to pass the base connection (TLS or encryption layer)
 			// to prepareConn so it can properly initialize VisionConn
-			return h.client.DialEarlyConnWithOptions(conn, visionBaseConn, destination, visionCanSplice)
+			return peer.observe(h.client.DialEarlyConnWithOptions(conn, visionBaseConn, destination, visionCanSplice)) //H
 		}
-		return h.client.DialEarlyConn(conn, destination)
+		return peer.observe(h.client.DialEarlyConn(conn, destination)) //H
 	case N.NetworkUDP:
 		h.logger.InfoContext(ctx, "outbound packet connection to ", destination)
 		if h.xudp {

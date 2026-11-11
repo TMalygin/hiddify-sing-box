@@ -66,7 +66,7 @@ its changes small and close to upstream so it can follow every sing-box release.
 - [TLS fragment](docs/hiddify/features/tls-fragment.en.md),
   [TLS tricks](docs/hiddify/features/tls-tricks.en.md),
   [REALITY additions](docs/hiddify/features/reality-hiddify.en.md) (post-quantum key share,
-  `key_share`, fragmentation, Firefox 148 and Safari 26.3 fingerprints),
+  verified VLESS peer addresses, `key_share`, fragmentation, Firefox 148 and Safari 26.3 fingerprints),
   [PROXY protocol](docs/hiddify/features/proxy-protocol.en.md).
 
 ### DNS

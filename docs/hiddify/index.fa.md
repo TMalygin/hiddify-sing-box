@@ -11,7 +11,7 @@
 
 - [تکه‌تکه کردن TLS](features/tls-fragment.fa.md): ClientHello را با مکث به تکه‌های کوچک تقسیم می‌کند تا DPI نتواند نام سرور را بخواند.
 - [ترفندهای TLS](features/tls-tricks.fa.md): نام سرور با حروف بزرگ و کوچک درهم و یک افزونهٔ padding در ClientHello.
-- [REALITY در هیدیفای](features/reality-hiddify.fa.md): key share پساکوانتومی، گزینهٔ `key_share` و تکه‌تکه کردن روی REALITY.
+- [REALITY در هیدیفای](features/reality-hiddify.fa.md): key share پساکوانتومی، گزینهٔ `key_share` تکه‌تکه کردن روی REALITY و مشاهدهٔ غیرفعال نشانی همتای تأییدشدهٔ VLESS.
 - [پروتکل PROXY](features/proxy-protocol.fa.md): ورودی‌ها هدر PROXY protocol را می‌خوانند و خروجی direct آن را می‌فرستد.
 
 ## پروتکل‌ها
